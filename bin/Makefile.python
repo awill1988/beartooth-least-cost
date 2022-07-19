@@ -9,7 +9,7 @@ python-setup: $(PYENV)/bin/python3 # Setup a Python virtual environment
 $(PYENV)/bin/python3:
 	python3 -m venv $(PYENV)
 	$(PYENV)/bin/pip install --upgrade pip wheel setuptools
-	$(PYENV)/bin/pip install -r requirements_dev.txt
+	$(PYENV)/bin/pip install -r requirements/dev.txt --exists-action i
 
 .PHONY: clean-python
 clean-python: # Clean the python environment
@@ -18,6 +18,7 @@ clean-python: # Clean the python environment
 	@find . -type d -name ".cache" -exec rm -r {} + || true
 	@find . -type d -name ".data" -exec rm -r {} + || true
 	@find . -type d -name "*.egg-info" -exec rm -r {} + || true
+	@find . -type d -name ".ipynb_checkpoints" -exec rm -r {} + || true
 
 .PHONY: lint-python
 lint-python: python-setup # Run flake8 and black to lint Python code
@@ -34,4 +35,4 @@ test-python: python-setup # Run all Python tests
 	$(PYENV)/bin/py.test
 
 build-python: python-setup # Build the Python library
-	$(PYENV)/bin/python3 setup.py build install
+	$(PYENV)/bin/pip install .

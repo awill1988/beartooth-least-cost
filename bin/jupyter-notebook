@@ -13,7 +13,7 @@ set -e
 pyenv=$(python3 -c "import sys; print('.venv' + '.'.join(str(x) for x in sys.version_info[:2]))")
 
 # will install jupyter if it wasn't already
-[ -f "${pyenv}/bin/jupyter" ] || "${pyenv}/bin/pip" install jupyter
+[ -f "${pyenv}/bin/jupyter" ] || "${pyenv}/bin/pip" install -r "${thisdir}/../requirements/jupyter.txt" --exists-action i
 
 #--------------------------------------------------------------------
 #                   jupyter notebook (start)

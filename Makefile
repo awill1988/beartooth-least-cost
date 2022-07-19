@@ -3,6 +3,7 @@
 # more digestible to have a small file at the root
 include bin/Makefile.contrib
 include bin/Makefile.python
+include bin/Makefile.jupyter
 include bin/Makefile.watch
 
 # Terminal helpers
@@ -22,9 +23,8 @@ help: ## Show this help.
 	@echo 'Targets:'
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  ${YELLOW}%-16s${GREEN}%s${RESET}\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-.PHONY: start
-start: build					## Start jupyter notebook server.
-	@bin/jupyter-notebook
+.PHONY: run
+run: jupyter-notebook			## Start jupyter notebook server.
 
 .PHONY: build
 build: build-python				## Build the library.

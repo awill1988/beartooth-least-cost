@@ -85,17 +85,17 @@ make test
 The code in this project is organized to allow contributors to abstract functionality into a python library and immediately use it to support
 the data science type of work found in the `notebooks/` directory.
 
-An example Jupyter Notebook is provided `notebooks/Echo.ipynb`.
+An example Jupyter Notebook is provided `notebooks/Solution.ipynb`.
 
 Open a terminal at the root of this project and run the following command:
 
 ```bash
-make start
+make run
 ```
 
 ## Contributing
 
-Contributing is a **opt-in** process and can be registered conveniently issues a single command for the lifetime of your local copy of the repo (see below).
+Contributing is a **opt-in** process and can be registered conveniently using a single command only once.
 
 ### Add `git hooks` for contributing
 
