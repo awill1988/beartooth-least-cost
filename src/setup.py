@@ -136,9 +136,7 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python :: 3.10",
     ],
-    install_requires=parse_requirements(
-        PYTHON_ROOT.joinpath("requirements/runtime.txt")
-    ),
+    install_requires=parse_requirements("requirements/runtime.txt"),
     keywords=f"{PACKAGE_NAME}",
     package_dir={
         PACKAGE_NAME: FROM_TOP / "lib",

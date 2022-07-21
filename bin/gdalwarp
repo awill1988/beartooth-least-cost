@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# helper to know where this script lives on the filesystem when it is run
+thisdir=$(cd "$(dirname "$0")"; pwd -P)
+
+# load helper bash functions and check for env prerequisites
+source "${thisdir}/rc"
+
+# don't continue when there's an unexpected error
+set -e
+
+# make sure gdalwarp is installed
+type gdalwarp >/dev/null || die "please install GDAL on your system."
+
+#--------------------------------------------------------------------
+#              gdalwarp (Digital Elevation Model)
+#--------------------------------------------------------------------
+#  Mosaic a large number of GeoTiff images using GDAL.
+#--------------------------------------------------------------------
+
+# data directory (location of source DEM files)
+data_dir="${thisdir}/../.data"
+
+# custodian of the data
+federal_agency="USGS"
+
+# We expect DEM raster images to be in GeoTiff format
+file_ext="tif"
+
+# initialize the aws cli command we will eventually execute
+gdal_cmd="gdalwarp"
+
+# gdalwarp options
+# -multi argument tells gdalwarp to use multiple processing threads
+# -wm 1000 tells gdalwarp to grab 1000 mb or memory for processing
+gdalwarp_opts="-multi -wm 1000"
+
+input_files=($(find ${data_dir} -type f \( -iname \*${federal_agency}\*.${file_ext} \)))
+
+output_file="${data_dir}/beartooth_mountains_dem.${file_ext}"
+
+# initiate the file sync from AWS to the local machine
+echo "${gdal_cmd} ${gdalwarp_opts} ${input_files[@]} ${output_file}"
+
+exit 0

@@ -1,4 +1,9 @@
-jupyter==1.0.0
-numpy
-pandas
+jupyter
 matplotlib
+geopandas
+fsspec
+requests
+aiohttp
+rasterio
+folium
+mapclassify

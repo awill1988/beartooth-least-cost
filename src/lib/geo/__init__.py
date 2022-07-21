@@ -1,7 +1,27 @@
+from shapely.geometry import box, Polygon
 from typing import FrozenSet, Tuple
 
+# Type aliases
+Point = Tuple[float, float]
+WSG84Coordinates = Tuple[float, float]
+LabledCoordinates = Tuple[str, WSG84Coordinates]
 
-def locations() -> FrozenSet[Tuple[str, Tuple[float, float]]]:
+
+def bbox() -> Polygon:
+    return box(
+        -110.57189941406251, 44.469071224701096, -108.37463378906251, 46.01603873833419
+    )
+
+
+def centroid() -> LabledCoordinates:
+    return (
+        # https://geohack.toolforge.org/geohack.php?pagename=Beartooth_Mountains&params=45_09_48_N_109_48_26_W_type:mountain_scale:100000
+        "Beartooth Mountains",
+        (45.163333, -109.807222),
+    )
+
+
+def waypoints() -> FrozenSet[Tuple[str, Tuple[float, float]]]:
     """
     Provides all relevant Beartooth Least Cost Path Ultra Marathon coordinate locations.
 

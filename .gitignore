@@ -21,6 +21,7 @@ watchman.log
 
 # for fuzzy testing
 src/tests/data/generated/*
+.data
 !**/.gitkeep
 
 notebooks/.ipynb_checkpoints

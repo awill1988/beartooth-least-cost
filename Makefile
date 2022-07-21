@@ -40,3 +40,5 @@ coverage: test-coverage			## Calculate test coverage of the library code.
 clean: watch-del clean-python	## Clean build artifacts.
 
 watch:	watch-add				## Format & build on file changes.
+
+deps: gdal						## Install system libraries needed to produce solution.

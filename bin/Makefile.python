@@ -16,7 +16,6 @@ clean-python: # Clean the python environment
 	@rm -r $(PYENV) .mypy_cache .pytest_cache .coverage dist build || true
 	@find . -type d -name "__pycache__" -exec rm -r {} + || true
 	@find . -type d -name ".cache" -exec rm -r {} + || true
-	@find . -type d -name ".data" -exec rm -r {} + || true
 	@find . -type d -name "*.egg-info" -exec rm -r {} + || true
 	@find . -type d -name ".ipynb_checkpoints" -exec rm -r {} + || true
 
@@ -35,4 +34,4 @@ test-python: python-setup # Run all Python tests
 	$(PYENV)/bin/py.test
 
 build-python: python-setup # Build the Python library
-	$(PYENV)/bin/pip install .
+	$(PYENV)/bin/pip install . --no-cache-dir -q --exists-action i

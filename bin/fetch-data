@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# helper to know where this script lives on the filesystem when it is run
+thisdir=$(cd "$(dirname "$0")"; pwd -P)
+
+# load helper bash functions and check for env prerequisites
+source "${thisdir}/rc"
+
+# don't continue when there's an unexpected error
+set -e
+
+# make sure awscli is installed
+type aws >/dev/null || die "please install the awscli v2 software. See https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html"
+
+#--------------------------------------------------------------------
+#              fetch-data (Digital Elevation Model)
+#--------------------------------------------------------------------
+#  download the DEM tiles from AWS bucket maintained by USGS for 1/3
+#  arc second (about 10 meter) resolution.
+#--------------------------------------------------------------------
+
+# data directory (our destination for the download)
+data_dir="${thisdir}/../.data"
+
+# custodian of the data
+federal_agency="USGS"
+
+# 1/3 arc is expressed in the filename
+arc_second_code="13"
+
+# AWS bucket location
+bucket_name="prd-tnm"
+
+# Object prefix that denotes where the current DEM files are located
+object_path_prefix="StagedProducts/Elevation/13/TIFF/current"
+
+# Determined by manually by visiting this page: https://www.peakbagger.com/range.aspx?rid=14411
+# as well as visiting the National Map Downloader https://apps.nationalmap.gov/downloader/#/elevation
+beartooth_mountains_coordiantes=(
+    "n46w111"
+    "n46w110"
+    "n46w109"
+    "n45w110"
+    "n45w111"
+    "n45w109"
+)
+
+# We expect DEM raster images to be in GeoTiff format
+file_ext="tif"
+
+# initialize the aws cli command we will eventually execute
+aws_cmd="aws s3 sync s3://${bucket_name}/${object_path_prefix} ${data_dir}"
+
+# IMPORTANT: aws s3 sync will by default include everything, so we need to exclude everything first!
+aws_cmd+=" --exclude \"*\""
+
+# loop through the normalized bearing-style coordnates and indicate we want to "include" them.
+for coord in "${beartooth_mountains_coordiantes[@]}"; do
+    aws_cmd+=" --include \"*${federal_agency}_${arc_second_code}_${coord}.${file_ext}\""
+done
+
+# IMPORTANT: we are downloading a public dataset and we must tell the CLI not to authorize the request!
+aws_cmd+=" --no-sign-request"
+
+# ensure the data directory exists
+mkdir -p "${data_dir}"
+
+# exec the file sync from AWS to the local machine
+bash -c "${aws_cmd}"
+
+exit 0
